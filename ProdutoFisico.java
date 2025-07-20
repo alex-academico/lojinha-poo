@@ -1,3 +1,5 @@
+package model.produto;
+
 import java.math.BigDecimal;
 
 public class ProdutoFisico extends Produto {
