@@ -114,13 +114,13 @@ public class Main {
             return;
         }
 
-        System.out.print("Novo nome (deixe em branco para não alterar): ");
+        System.out.print("Novo nome: ");
         String nome = scanner.nextLine();
         if (!nome.isEmpty()) {
             p.setNome(nome);
         }
 
-        System.out.print("Novo preço (deixe em branco para não alterar): ");
+        System.out.print("Novo preço: ");
         String precoStr = scanner.nextLine();
         if (!precoStr.isEmpty()) {
             try {
