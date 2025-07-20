@@ -1,3 +1,5 @@
+package model.produto;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
