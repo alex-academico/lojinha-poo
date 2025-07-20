@@ -1,8 +1,9 @@
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
+import model.produto.Produto;
 
-public class Produtos {
+public class Main {
     private ArrayList<Produto> produtos = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
