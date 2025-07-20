@@ -1,27 +1,63 @@
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Scanner;
 import model.produto.Produto;
 
 public class Main {
-    private ArrayList<Produto> produtos = new ArrayList<>();
+    private Produto[] produtos;
+    private int totalDeProdutos;
     private Scanner scanner = new Scanner(System.in);
 
+    public Main(int capacidade) {
+        this.produtos = new Produto[capacidade];
+        this.totalDeProdutos = 0;
+    }
+
     public static void main(String[] args) {
-        Produtos app = new Produtos();
+        Scanner setupScanner = new Scanner(System.in);
+        int capacidade = 0;
+        
+        System.out.print("Quantos produtos deseja cadastrar: ");
+
+        while (true) {
+            
+            if (setupScanner.hasNextInt()) {
+                capacidade = setupScanner.nextInt();
+                
+                if (capacidade > 0) {
+                    break; 
+                } else {
+                    System.out.println("Erro: O número deve ser positivo.");
+                    System.out.print("Tente novamente: ");
+                }
+            } else {
+                System.out.println("Erro: Entrada inválida. Por favor, digite um número inteiro.");
+                setupScanner.next(); 
+                
+                System.out.print("Tente novamente: ");
+            }
+        }
+
+        Main app = new Main(capacidade);
+        System.out.println("\nSistema iniciado com capacidade para " + capacidade + " produtos.");
         app.menu();
+        
     }
 
     public void menu() {
         while (true) {
-            System.out.println("\n1 - Cadastrar produto");
+            System.out.println("\n--- Menu do Sistema das Musas ---");
+            System.out.println("1 - Cadastrar produto");
             System.out.println("2 - Alterar produto");
             System.out.println("3 - Adicionar estoque");
             System.out.println("4 - Remover estoque");
-            System.out.println("x - Listar produtos"); // ta x pq não sei quantas opções vao entrar e eahco que seria interresante as listagens por ultimo
+            System.out.println("x - Listar produtos");
             System.out.println("0 - Sair");
             System.out.print("Escolha: ");
             String opcao = scanner.nextLine();
+            
+            if (opcao.isEmpty()) {
+                opcao = scanner.nextLine();
+            }
 
             switch (opcao) {
                 case "1": cadastrarProduto(); break;
@@ -40,11 +76,16 @@ public class Main {
     }
 
     private void cadastrarProduto() {
+        if (totalDeProdutos >= produtos.length) {
+            System.out.println("\nErro: Limite máximo de " + produtos.length + " produtos atingido.");
+            return;
+        }
+
         System.out.print("Código do produto: ");
         String codigo = scanner.nextLine();
 
         if (buscarProdutoPorCodigo(codigo) != null) {
-            System.out.println("Código já associado a produto existente.");
+            System.out.println("Erro: Código já associado a um produto existente.");
             return;
         }
 
@@ -54,15 +95,15 @@ public class Main {
         try {
             System.out.print("Preço do produto: ");
             BigDecimal preco = new BigDecimal(scanner.nextLine());
-
             Produto novo = new Produto(codigo, nome, preco, 0);
-            produtos.add(novo);
+            this.produtos[totalDeProdutos] = novo;
+            this.totalDeProdutos++;
             System.out.println("Produto cadastrado com sucesso.");
         } catch (NumberFormatException e) {
             System.out.println("Erro: Preço inválido. O cadastro foi cancelado.");
         }
     }
-
+    
     private void alterarProduto() {
         System.out.print("Código do produto que deseja alterar: ");
         String codigo = scanner.nextLine();
@@ -73,13 +114,13 @@ public class Main {
             return;
         }
 
-        System.out.print("Novo nome: ");
+        System.out.print("Novo nome (deixe em branco para não alterar): ");
         String nome = scanner.nextLine();
         if (!nome.isEmpty()) {
             p.setNome(nome);
         }
 
-        System.out.print("Novo preço: ");
+        System.out.print("Novo preço (deixe em branco para não alterar): ");
         String precoStr = scanner.nextLine();
         if (!precoStr.isEmpty()) {
             try {
@@ -92,13 +133,13 @@ public class Main {
     }
 
     private void listarProdutos() {
-        if (produtos.isEmpty()) {
+        if (totalDeProdutos == 0) {
             System.out.println("Nenhum produto cadastrado.");
             return;
         }
         System.out.println("\n--- LISTA DE PRODUTOS ---");
-        for (Produto p : produtos) {
-            System.out.println(p);
+        for (int i = 0; i < totalDeProdutos; i++) {
+            System.out.println(produtos[i]);
         }
     }
 
@@ -157,9 +198,9 @@ public class Main {
     }
 
     private Produto buscarProdutoPorCodigo(String codigo) {
-        for (Produto p : produtos) {
-            if (p.getCodigo().equals(codigo)) {
-                return p;
+        for (int i = 0; i < totalDeProdutos; i++) {
+            if (produtos[i] != null && produtos[i].getCodigo().equals(codigo)) {
+                return produtos[i];
             }
         }
         return null;
