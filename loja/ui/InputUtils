@@ -1,0 +1,38 @@
+package ui;
+
+import java.math.BigDecimal;
+import java.util.Scanner;
+
+public class InputUtils {
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static String lerString(String mensagem) {
+        System.out.print(mensagem);
+        return scanner.nextLine().trim();
+    }
+
+    public static int lerInt(String mensagem) {
+        while (true) {
+            System.out.print(mensagem);
+            String entrada = scanner.nextLine().trim();
+            try {
+                return Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada invalida");
+            }
+        }
+    }
+
+    public static BigDecimal lerBigDecimal(String mensagem) {
+        while (true) {
+            System.out.print(mensagem);
+            String entrada = scanner.nextLine().trim();
+            try {
+                return new BigDecimal(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida");
+            }
+        }
+    }
+}
+
