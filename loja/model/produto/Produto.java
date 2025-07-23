@@ -27,6 +27,9 @@ public abstract class Produto {
     public void setNome(String nome) {
         this.nome = nome;
     }
+    public String getNome(){
+        return nome;
+    }
 
     public void setPrecoBase(BigDecimal precoBase) {
         this.precoBase = precoBase;
