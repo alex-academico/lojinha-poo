@@ -1,0 +1,10 @@
+package model.nota;
+
+import model.produto.Produto;
+
+public class ItemNotaLoja extends ItemNota {
+
+    public ItemNotaLoja(Produto produto, int quantidade) {
+        super(produto, quantidade);
+    }
+}
