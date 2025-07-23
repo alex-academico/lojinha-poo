@@ -13,8 +13,6 @@ import model.produto.ProdutoPerecivel.FormaArmazenamentoPerecivel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class ConsoleMenu {
     private Produto[] produtos;
@@ -81,9 +79,9 @@ public class ConsoleMenu {
         System.out.println("\n---- Cadastro de Novo Produto ----");
         System.out.println("Qual o tipo de produto?");
         System.out.println("1 - Físico (moveis)");
-        System.out.println("2 - Perecível(alimento)");
-        System.out.println("3 - Digital(ebook, filme/serie)");
-        String tipo = InputUtils.lerString("Escolha o tipo: ");
+        System.out.println("2 - Perecível (alimento)");
+        System.out.println("3 - Digital (ebook, filme/serie)");
+        String tipo = InputUtils.lerString("Escolha o tipo: ").trim();
 
         String codigo = InputUtils.lerString("Código: ");
         if (buscarProdutoPorCodigo(codigo) != null) {
@@ -100,15 +98,15 @@ public class ConsoleMenu {
             switch (tipo) {
                 case "1": // Físico
                     System.out.print("Tamanho (PEQUENO, MEDIO, GRANDE): ");
-                    TamanhoProduto tamanho = TamanhoProduto.valueOf(InputUtils.lerString("").toUpperCase());
+                    TamanhoProduto tamanho = TamanhoProduto.valueOf(InputUtils.lerString("").toUpperCase().trim());
                     System.out.print("Local de Armazenamento (FABRICA, DEPOSITO, MOSTRUARIO): ");
-                    LocalArmazenamento local = LocalArmazenamento.valueOf(InputUtils.lerString("").toUpperCase());
+                    LocalArmazenamento local = LocalArmazenamento.valueOf(InputUtils.lerString("").toUpperCase().trim());
                     novoProduto = new ProdutoFisico(codigo, nome, preco, estoque, tamanho, local);
                     break;
                 case "2": // Perecível
                     LocalDate validade = InputUtils.lerData("Data de Validade (dd/MM/yyyy): ");
                     System.out.print("Forma de Armazenamento (PRATELEIRA, REFRIGERADOR, CONGELADOR, FRESCO): ");
-                    FormaArmazenamentoPerecivel forma = FormaArmazenamentoPerecivel.valueOf(InputUtils.lerString("").toUpperCase());
+                    FormaArmazenamentoPerecivel forma = FormaArmazenamentoPerecivel.valueOf(InputUtils.lerString("").toUpperCase().trim());
                     novoProduto = new ProdutoPerecivel(codigo, nome, preco, estoque, validade, forma);
                     break;
                 case "3": // Digital
@@ -123,7 +121,7 @@ public class ConsoleMenu {
             produtos[totalDeProdutos++] = novoProduto;
             System.out.println("Produto registrado com sucesso!");
         } catch (IllegalArgumentException e) {
-            System.out.println("Erro: Valor inválido para um dos campos (Tamanho, Local, etc).Está escrito certo? Tem o nome como escrever nas opções PF me ajude a te ajudar. Cadastro cancelado.");
+            System.out.println("Erro: Valor inválido para um dos campos (Tamanho, Local, etc). Está escrito certo? Tem o nome como escrever nas opções PF me ajude a te ajudar. Cadastro cancelado.");
         } catch (Exception e) {
             System.out.println("Ocorreu um erro inesperado: " + e.getMessage() + ". Cadastro cancelado.");
         }
@@ -145,7 +143,7 @@ public class ConsoleMenu {
             System.out.println("Nenhum cliente cadastrado");
             return;
         }
-         System.out.println("\n--- Lista de Clientes ---");
+        System.out.println("\n--- Lista de Clientes ---");
         for (int i = 0; i < totalDeClientes; i++) {
             System.out.println(clientes[i]);
         }
@@ -153,7 +151,6 @@ public class ConsoleMenu {
 
     private void alterarProduto() {
         String codigo = InputUtils.lerString("Código do produto para alterar: ");
-
         Produto p = buscarProdutoPorCodigo(codigo);
         if (p == null) {
             System.out.println("Produto não encontrado :(");
@@ -173,7 +170,7 @@ public class ConsoleMenu {
                     System.out.println("Preço inválido / Valor não alterado :(");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Preço invalido / valor não alterado :(");
+                System.out.println("Preço inválido / valor não alterado :(");
             }
         }
         System.out.println("Produto atualizado :)");
@@ -208,14 +205,14 @@ public class ConsoleMenu {
             String cnpj = InputUtils.lerString("CNPJ: ");
             clientes[totalDeClientes++] = new PessoaJuridica(id, nome, endereco, telefone, cnpj);
         } else {
-            System.out.println("Tipo invalido / Cadastro cancelado");
+            System.out.println("Tipo inválido / Cadastro cancelado");
             return;
         }
         System.out.println("Cliente registrado com sucesso :)");
     }
 
     private void alterarCliente() {
-        String id = InputUtils.lerString("ID do cliente para alteraração: ");
+        String id = InputUtils.lerString("ID do cliente para alteração: ");
         Cliente c = buscarClientePorId(id);
         if (c == null) {
             System.out.println("Cliente não encontrado :(");
@@ -264,7 +261,7 @@ public class ConsoleMenu {
             System.out.println("Item adicionado");
         }
         if (novaNota.getItens().length == 0) {
-            System.out.println("Nenhum item adicionado a nota /  Nota cancelada ");
+            System.out.println("Nenhum item adicionado à nota / Nota cancelada ");
             return;
         }
         if (totalDeNotas == notasEmitidas.length) {
