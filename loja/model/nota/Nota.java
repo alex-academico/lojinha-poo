@@ -4,7 +4,7 @@ import model.cliente.Cliente;
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
 
-public class Nota {
+public abstract class Nota {
     private static int contadorNotas = 1;
 
     private final int numNota;
