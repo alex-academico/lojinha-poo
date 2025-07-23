@@ -26,16 +26,9 @@ public class ProdutoFisico extends Produto {
         return Produto.TipoProduto.FISICO;
     }
 
-    public TamanhoProduto getTamanho() {
-        return tamanho;
-    }
-
-    public LocalArmazenamento getLocalArmazenamento() {
-        return localArmazenamento;
-    }
-    
     public String toString() {
         String detalhesPai = super.toString().substring(0, super.toString().length() - 1);
-        return detalhesPai + ", Tipo:" + getTipoProduto().getDescricao() + ", Tamanho:" + tamanho + ", Armazenamento:" + localArmazenamento + "]";
+        return detalhesPai + ", Tipo: " + getTipoProduto().getDescricao() + 
+               ", Tamanho: " + tamanho + ", Armazenamento: " + localArmazenamento + "]";
     }
 }
