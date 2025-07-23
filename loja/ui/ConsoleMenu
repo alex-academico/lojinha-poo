@@ -244,7 +244,7 @@ public class ConsoleMenu {
         }
         NotaLoja novaNota = new NotaLoja(cliente);
         while (true) {
-            String codigoProduto = InputUtils.lerString("Código do produto para adicionar: ");
+            String codigoProduto = InputUtils.lerString("Código do produto para adicionar: (enter caso queira finalizar a seleção de produtos) ");
             if (codigoProduto.isEmpty()) break;
             Produto produto = buscarProdutoPorCodigo(codigoProduto);
             if (produto == null) {
