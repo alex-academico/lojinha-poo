@@ -1,0 +1,9 @@
+package model.nota;
+
+import model.cliente.Cliente;
+
+public class NotaLoja extends Nota {
+    public NotaLoja(Cliente cliente) {
+        super(cliente);
+    }
+}
