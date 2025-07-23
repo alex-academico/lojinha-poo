@@ -25,6 +25,14 @@ public class ProdutoFisico extends Produto {
     public Produto.TipoProduto getTipoProduto() {
         return Produto.TipoProduto.FISICO;
     }
+    
+    public String getTipo() {
+        return getTipoProduto().getDescricao();
+    }
+
+    public String getDetalhes() {
+        return toString();
+    }
 
     public String toString() {
         String detalhesPai = super.toString().substring(0, super.toString().length() - 1);
