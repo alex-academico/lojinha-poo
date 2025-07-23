@@ -23,7 +23,9 @@ public class ProdutoPerecivel extends Produto {
     public Produto.TipoProduto getTipoProduto() {
         return Produto.TipoProduto.PERECIVEL;
     }
-
+    public String getTipo() {
+        return getTipoProduto().getDescricao();
+    }
     public String getDetalhes() {
         String detalhesPai = super.toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
