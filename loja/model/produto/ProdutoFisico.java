@@ -22,6 +22,10 @@ public class ProdutoFisico extends Produto {
         this.localArmazenamento = local;
     }
 
+    public Produto.TipoProduto getTipoProduto() {
+        return Produto.TipoProduto.FISICO;
+    }
+
     public TamanhoProduto getTamanho() {
         return tamanho;
     }
@@ -32,6 +36,6 @@ public class ProdutoFisico extends Produto {
     
     public String toString() {
         String detalhesPai = super.toString().substring(0, super.toString().length() - 1);
-        return detalhesPai + ", Tamanho:" + tamanho + ", Armazenamento:" + localArmazenamento + "]";
+        return detalhesPai + ", Tipo:" + getTipoProduto().getDescricao() + ", Tamanho:" + tamanho + ", Armazenamento:" + localArmazenamento + "]";
     }
 }
