@@ -3,7 +3,7 @@ package model.nota;
 import java.math.BigDecimal;
 import model.produto.Produto;
 
-public class ItemNota {
+public abstract class ItemNota {
     
     private Produto produto;
     private int quantidade;
