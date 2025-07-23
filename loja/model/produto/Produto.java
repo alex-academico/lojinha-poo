@@ -9,6 +9,22 @@ public abstract class Produto {
     private BigDecimal precoBase;
     private int estoque;
 
+    public enum TipoProduto {
+        FISICO("Físico"),
+        DIGITAL("Digital"),
+        PERECIVEL("Perecível");
+
+        private final String descricao;
+
+        TipoProduto(String descricao) {
+            this.descricao = descricao;
+        }
+
+        public String getDescricao() {
+            return descricao;
+        }
+    }
+
     public Produto(String codigo, String nome, BigDecimal precoBase, int estoque) {
         this.codigo = codigo;
         this.nome = nome;
