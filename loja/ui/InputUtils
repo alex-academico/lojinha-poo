@@ -1,7 +1,9 @@
 package ui;
-
 import java.math.BigDecimal;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class InputUtils {
     private static final Scanner scanner = new Scanner(System.in);
@@ -31,6 +33,30 @@ public class InputUtils {
                 return new BigDecimal(entrada);
             } catch (NumberFormatException e) {
                 System.out.println("Entrada inválida");
+            }
+        }
+    }
+ public static double lerDouble(String mensagem) {
+        while (true) {
+            System.out.print(mensagem);
+            String entrada = scanner.nextLine().trim();
+            try {
+                return Double.parseDouble(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida");
+            }
+        }
+    }
+
+    public static LocalDate lerData(String mensagem) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        while (true) {
+            System.out.print(mensagem);
+            String entrada = scanner.nextLine().trim();
+            try {
+                return LocalDate.parse(entrada, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de data inválido. Use dd/MM/yyyy.");
             }
         }
     }
