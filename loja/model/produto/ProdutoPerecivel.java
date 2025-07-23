@@ -2,6 +2,7 @@ package model.produto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ProdutoPerecivel extends Produto {
 
@@ -19,7 +20,14 @@ public class ProdutoPerecivel extends Produto {
         this.formaArmazenamento = forma;
     }
 
+    public Produto.TipoProduto getTipoProduto() {
+        return Produto.TipoProduto.PERECIVEL;
+    }
+
     public String getDetalhes() {
-        return "| Perecível: validade até " + validade + ", armazenado em " + formaArmazenamento;
+        String detalhesPai = super.toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String detalhesFilho = "| Perecível: validade até " + validade.format(formatter) + ", armazenado em " + formaArmazenamento;
+        return detalhesPai + " " + detalhesFilho;
     }
 }
