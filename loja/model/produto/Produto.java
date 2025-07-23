@@ -29,7 +29,7 @@ public abstract class Produto {
     }
 
     public void setPrecoBase(BigDecimal precoBase) {
-        this.precoBase = preco;
+        this.precoBase = precoBase;
     }
 
     public BigDecimal getPrecoBase() {
