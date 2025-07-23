@@ -2,7 +2,24 @@ package model.produto;
 
 import java.math.BigDecimal;
 
-public class Produto {
+public abstract class Produto {
+    
+    public enum TipoProduto {
+        FISICO("Físico"),
+        DIGITAL("Digital"),
+        PERECIVEL("Perecível");
+
+        private final String descricao;
+
+        TipoProduto(String descricao) {
+            this.descricao = descricao;
+        }
+
+        public String getDescricao() {
+            return descricao;
+        }
+    }
+
     private String codigo;
     private String nome;
     private BigDecimal precoBase;
@@ -15,20 +32,18 @@ public class Produto {
         this.estoque = estoque;
     }
 
+    public abstract TipoProduto getTipoProduto();
+
     public String getCodigo() {
         return codigo;
     }
 
-    public int getEstoque() {
-        return estoque;
+    public String getNome() {
+        return nome;
     }
     
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setPrecoBase(BigDecimal preco) {
-        this.precoBase = preco;
+    public int getEstoque() {
+        return estoque;
     }
 
     public void adicionarEstoque(int quantidade) {
