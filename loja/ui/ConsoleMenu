@@ -1,0 +1,291 @@
+package ui;
+
+import model.cliente.Cliente;
+import model.nota.Nota;
+import model.produto.Produto;
+import model.nota.NotaLoja;
+import model.nota.ItemNotaLoja;
+import model.cliente.PessoaFisica;
+import model.cliente.PessoaJuridica;
+
+import java.math.BigDecimal;
+
+public class ConsoleMenu {
+    private Produto[] produtos;
+    private int totalDeProdutos;
+
+    private Cliente[] clientes;
+    private int totalDeClientes;
+
+    private Nota[] notasEmitidas;
+    private int totalDeNotas;
+
+    public ConsoleMenu() {
+        this.produtos = new Produto[100];
+        this.totalDeProdutos = 0;
+
+        this.clientes = new Cliente[100];
+        this.totalDeClientes = 0;
+
+        this.notasEmitidas = new Nota[100];
+    }
+
+    public void iniciar() {
+        while (true) {
+            System.out.println("\n    *   MENU    * ");
+            System.out.println("1. Cadastrar produto");
+            System.out.println("2. Alterar produto");
+            System.out.println("3. Adicionar estoque ao produto");
+            System.out.println("4. Cadastrar cliente");
+            System.out.println("5. Alterar cliente");
+            System.out.println("6. Criar nota de compra");
+            System.out.println("7. Listar notas emitidas");
+            System.out.println("8. Listar produtos");
+            System.out.println("9. Listar clientes");
+            System.out.println("0. Sair");
+
+            String opcao = InputUtils.lerString("Escolha uma opção: ");
+
+            switch (opcao) {
+                case "1": cadastrarProduto(); break;
+                case "2": alterarProduto(); break;
+                case "3": adicionarEstoqueProduto(); break;
+                case "4": cadastrarCliente(); break;
+                case "5": alterarCliente(); break;
+                case "6": criarNota(); break;
+                case "7": listarNotasEmitidas(); break;
+                case "8": listarProdutos(); break;
+                case "9": listarClientes(); break;
+                case "0":
+                    System.out.println("Hasta la vista ;) <3");
+                    return;
+                default:
+                    System.out.println("Opção invalida");
+            }
+        }
+    }
+
+    private void cadastrarProduto() {
+        int capacidade = InputUtils.lerInt("Quantos produtos deseja cadastrar? ");
+
+        Produto[] novosProdutos = new Produto[totalDeProdutos + capacidade];
+        for (int i = 0; i < totalDeProdutos; i++) {
+            novosProdutos[i] = produtos[i];
+        }
+        produtos = novosProdutos;
+
+        for (int i = 0; i < capacidade; i++) {
+            System.out.println("\nProduto " + (totalDeProdutos + 1) + ":");
+
+            String codigo = InputUtils.lerString("Código: ");
+            if (buscarProdutoPorCodigo(codigo) != null) {
+                System.out.println("Código já registrado");
+                i--;
+                continue;
+            }
+
+            String nome = InputUtils.lerString("Nome: ");
+            BigDecimal preco = InputUtils.lerBigDecimal("Preço: ");
+
+            int estoque = InputUtils.lerInt("Quantidade em estoque: ");
+
+            produtos[totalDeProdutos++] = new Produto(codigo, nome, preco, estoque);
+            System.out.println("Produto registrado");
+        }
+    }
+
+    private void alterarProduto() {
+        String codigo = InputUtils.lerString("Código do produto para alterar: ");
+
+        Produto p = buscarProdutoPorCodigo(codigo);
+        if (p == null) {
+            System.out.println("Produto não encontrado :(");
+            return;
+        }
+
+        String nome = InputUtils.lerString("Novo nome (deixe vazio se quiser manter o nome): ");
+        if (!nome.isEmpty()) p.setNome(nome);
+
+        String precoStr = InputUtils.lerString("Novo preço (deixe vazio se quiser manter o preço): ");
+        if (!precoStr.isEmpty()) {
+            try {
+                BigDecimal preco = new BigDecimal(precoStr);
+                if (preco.compareTo(BigDecimal.ZERO) >= 0) {
+                    p.setPrecoBase(preco);
+                } else {
+                    System.out.println("Preço inválido / Valor não alterado :(");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Preço invalido / valor não alterado :(");
+            }
+        }
+
+        System.out.println("Produto atualizado :)");
+    }
+
+    private void adicionarEstoqueProduto() {
+        String codigo = InputUtils.lerString("Código do produto: ");
+
+        Produto p = buscarProdutoPorCodigo(codigo);
+        if (p == null) {
+            System.out.println("Produto não encontrado");
+            return;
+        }
+
+        int qtd = InputUtils.lerInt("Quantidade a adicionar: ");
+
+        p.adicionarEstoque(qtd);
+        System.out.println("Estoque atualizado :)");
+    }
+
+    private void cadastrarCliente() {
+        if (totalDeClientes >= clientes.length) {
+            System.out.println("Limite de clientes atingido");
+            return;
+        }
+
+        String id = InputUtils.lerString("ID do cliente: ");
+        String nome = InputUtils.lerString("Nome: ");
+        String endereco = InputUtils.lerString("Endereço: ");
+        String telefone = InputUtils.lerString("Telefone: ");
+
+        int tipo = InputUtils.lerInt("Tipo de cliente: 1 - Pessoa Física ou 2 - Pessoa Jurídica ");
+
+        if (tipo == 1) {
+            String cpf = InputUtils.lerString("CPF: ");
+            clientes[totalDeClientes++] = new PessoaFisica(id, nome, endereco, telefone, cpf);
+        } else if (tipo == 2) {
+            String cnpj = InputUtils.lerString("CNPJ: ");
+            clientes[totalDeClientes++] = new PessoaJuridica(id, nome, endereco, telefone, cnpj);
+        } else {
+            System.out.println("Tipo invalido / Cadastro cancelado");
+            return;
+        }
+
+        System.out.println("Cliente registrado com sucesso :)");
+    }
+
+    private void alterarCliente() {
+        String id = InputUtils.lerString("ID do cliente para alteraração: ");
+
+        Cliente c = buscarClientePorId(id);
+        if (c == null) {
+            System.out.println("Cliente não encontrado :(");
+            return;
+        }
+
+        String nome = InputUtils.lerString("Novo nome (deixe vazio se quuiser manter nome): ");
+        if (!nome.isEmpty()) c.setNome(nome);
+
+        String endereco = InputUtils.lerString("Novo endereço (deixe vazio se quiser manter o endereço): ");
+        if (!endereco.isEmpty()) c.setEndereco(endereco);
+
+        String telefone = InputUtils.lerString("Novo telefone (deixe vazio se quiser manter o telefone): ");
+        if (!telefone.isEmpty()) c.setTelefone(telefone);
+
+        System.out.println("Cliente atualizado :)");
+    }
+
+    private void criarNota() {
+        if (totalDeClientes == 0) {
+            System.out.println("Nenhum cliente registrado");
+            return;
+        }
+        if (totalDeProdutos == 0) {
+            System.out.println("Nenhum produto registrado");
+            return;
+        }
+
+        String clienteId = InputUtils.lerString("ID do cliente para nota: ");
+
+        Cliente cliente = buscarClientePorId(clienteId);
+        if (cliente == null) {
+            System.out.println("Cliente não encontrado :(");
+            return;
+        }
+
+        Nota novaNota = new NotaLoja(cliente);
+
+        while (true) {
+            String codigoProduto = InputUtils.lerString("Código do produto para adicionar (enter para finalizar): ");
+            if (codigoProduto.isEmpty()) break;
+
+            Produto produto = buscarProdutoPorCodigo(codigoProduto);
+            if (produto == null) {
+                System.out.println("Produto não encontrado :(");
+                continue;
+            }
+
+            int quantidade = InputUtils.lerInt("Quantidade: ");
+
+            if (produto.getEstoque() < quantidade) {
+                System.out.println("Estoque insuficiente --> Estoque atual: " + produto.getEstoque());
+                continue;
+            }
+
+            produto.removerEstoque(quantidade);
+            novaNota.adicionarItem(new ItemNotaLoja(produto, quantidade));
+            System.out.println("Item adicionado");
+        }
+
+        if (novaNota.getItens().length == 0) {
+            System.out.println("Nenhum item adicionado a nota /  Nota cancelada ");
+            return;
+        }
+
+        if (totalDeNotas == notasEmitidas.length) {
+            Nota[] novasNotas = new Nota[notasEmitidas.length + 10];
+            for (int i = 0; i < totalDeNotas; i++) {
+                novasNotas[i] = notasEmitidas[i];
+            }
+            notasEmitidas = novasNotas;
+        }
+
+        notasEmitidas[totalDeNotas++] = novaNota;
+        novaNota.exibirResumo();
+    }
+
+    private void listarNotasEmitidas() {
+        if (totalDeNotas == 0) {
+            System.out.println("Nenhuma nota emitida");
+            return;
+        }
+        for (int i = 0; i < totalDeNotas; i++) {
+            notasEmitidas[i].exibirResumo();
+        }
+    }
+
+    private void listarProdutos() {
+        if (totalDeProdutos == 0) {
+            System.out.println("Nenhum produto cadastrado");
+            return;
+        }
+        for (int i = 0; i < totalDeProdutos; i++) {
+            System.out.println(produtos[i]);
+        }
+    }
+
+    private void listarClientes() {
+        if (totalDeClientes == 0) {
+            System.out.println("Nenhum cliente cadastrado");
+            return;
+        }
+        for (int i = 0; i < totalDeClientes; i++) {
+            System.out.println(clientes[i]);
+        }
+    }
+
+    private Produto buscarProdutoPorCodigo(String codigo) {
+        for (int i = 0; i < totalDeProdutos; i++) {
+            if (produtos[i].getCodigo().equals(codigo)) return produtos[i];
+        }
+        return null;
+    }
+
+    private Cliente buscarClientePorId(String id) {
+        for (int i = 0; i < totalDeClientes; i++) {
+            if (clientes[i].getId().equals(id)) return clientes[i];
+        }
+        return null;
+    }
+}
